@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-class driver {
+class server {
 
     public final static int SOCKET_PORT = 13267;
     public final static String FILE_TO_SEND = "test.txt";
