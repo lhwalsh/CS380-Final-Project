@@ -1,5 +1,5 @@
 import java.io.BufferedOutputStream;
-import java.io.FIleOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -15,6 +15,7 @@ public class client {
 	int bytesRead;
 	int current = 0;
 	FileOutputStream fos = null;
+	BufferedOutputStream bos = null;
 	Socket sock = null;
 	try {
 	    sock = new Socket(SERVER, SOCKET_PORT);
@@ -28,7 +29,7 @@ public class client {
 	    current = bytesRead;
 
 	    do {
-		bytesRead = is.read(mybytearray, current. (mybytearray.length-current));
+		bytesRead = is.read(mybytearray, current, (mybytearray.length-current));
 		if (bytesRead >= 0) {
 		    current += bytesRead;
 		}
@@ -40,7 +41,7 @@ public class client {
 	}
 	finally {
 	    if (fos != null) fos.close();
-	    if (box != null) bos.close();
+	    if (bos != null) bos.close();
 	    if (sock != null) sock.close();
 	}
     }
