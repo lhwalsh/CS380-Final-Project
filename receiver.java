@@ -3,6 +3,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
+import java.io.DataOutputStream;
+import java.io.File;
 
 public class receiver extends Thread {
 
@@ -21,11 +24,37 @@ public class receiver extends Thread {
         while (true) {
             try {
                 Socket clientSock = ss.accept();
-                saveFile(clientSock);
+		if (verify(clientSock))
+		    saveFile(clientSock);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean verify(Socket clientSock) throws IOException {
+	DataInputStream dis = new DataInputStream(clientSock.getInputStream());
+	String attempt = dis.readUTF();
+	Scanner sc = new Scanner(new File("info.txt"));
+	String actual = sc.next();
+	DataOutputStream dos = new DataOutputStream(clientSock.getOutputStream());
+	if (attempt.equals(actual)) {
+	    dos.writeByte(0);
+	    dis.close();
+	    dos.close();
+	    return false;
+	} else {
+	    dos.writeByte(1);
+	}
+	attempt = dis.readUTF();
+	actual = sc.next();
+	if (attempt.equals(actual)) {
+	    dos.writeByte(0);
+	    dis.close();
+	    dos.close();
+	    return false;
+	}
+	return true;
     }
 
     private void saveFile(Socket clientSock) throws IOException {
