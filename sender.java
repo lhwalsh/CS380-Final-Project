@@ -3,63 +3,26 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class sender {
+public class Sender {
 
     private Socket s;
-    private ServerSocket ss;
+    private ServerSocket inSock;
     private String host;
     private int port;
     private String file;
-
-    public sender(String host, int port, String file,int tryCount) {
+    public Sender(String host, int port, String file,int tryCount) {
         this.host = host;
         this.port = port;
         this.file = file;
         try {
-	    System.out.println("Inside try statement");
-            ss = new ServerSocket(port);
-	    System.out.println("ServerSocket accepted");
-	    s = ss.accept();
-	    System.out.println("Socket accepted");
-	    if (verify())
-		sendFile(file,tryCount);
+            s = new Socket(host, port);
+            sendFile(file,tryCount);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-<<<<<<< HEAD
     public void sendFile(String file,int tryCount) throws IOException , ClassNotFoundException{
-=======
-    public boolean verify() throws IOException {
-	Scanner sc = new Scanner(System.in);
-	System.out.println("Please enter the username.");
-	String username = sc.next();
-	System.out.println("Please enter the password.");
-	String password = sc.next();
-	DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-	dos.writeUTF(username);
-	DataInputStream dis = new DataInputStream(s.getInputStream());
-	byte answer = dis.readByte();
-	if (answer == 0) {
-	    System.out.println("Incorrect Username.");
-	    dos.close();
-	    dis.close();
-	    return false;
-	}
-	dos.writeUTF(password);
-	answer = dis.readByte();
-	if (answer == 0) {
-	    System.out.println("Incorrect Password.");
-	    dos.close();
-	    dis.close();
-	    return false;
-	}
-	return true;
-    }
-
-    public void sendFile(String file,int tryCount) throws IOException {
->>>>>>> 8e7fef00843c9d147437e3e2a3755467fc37fe77
         int remainingAttempts = tryCount;
         BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
         DataOutputStream dos = new DataOutputStream(s.getOutputStream());
@@ -92,7 +55,6 @@ public class sender {
         fis.close();
         dos.close();
     }
-<<<<<<< HEAD
     private String getKey() throws FileNotFoundException {
 	    Scanner sc = new Scanner( new File("key.txt"));
 	    String answer = "";
@@ -100,16 +62,6 @@ public class sender {
 	        answer = answer + sc.next();
     	}
 	    return answer;
-=======
-
-    private String getKey() throws FileNotFoundException {
-	Scanner sc = new Scanner( new File("key.txt"));
-	String answer = "";
-	while (sc.hasNext()) {
-	    answer = answer + sc.next();
-	}
-	return answer;
->>>>>>> 8e7fef00843c9d147437e3e2a3755467fc37fe77
     }
 
     private boolean waitForResponse() throws ClassNotFoundException
@@ -135,7 +87,7 @@ public class sender {
 
     //this is only to test the sender class without the driver class
     public static void main(String[] args) {
-        sender fc = new sender("localhost", 1988, "test.txt",3);
+        Sender fc = new Sender("localhost", 1988, "test.txt",3);
     }
 
 }
