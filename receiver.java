@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Receiver extends Thread {
+public class receiver extends Thread {
 
     private ServerSocket ss;
 
-    public Receiver(int port, boolean asciiArmoring) {
+    public receiver(int port, boolean asciiArmoring) {
         try {
             ss = new ServerSocket(port);
         } catch (IOException e) {
@@ -17,6 +17,7 @@ public class Receiver extends Thread {
     }
 
     public void run() {
+	System.out.println("Looking for connection...");
         while (true) {
             try {
                 Socket clientSock = ss.accept();
@@ -29,17 +30,13 @@ public class Receiver extends Thread {
 
     private void saveFile(Socket clientSock) throws IOException {
         DataInputStream dis = new DataInputStream(clientSock.getInputStream());
-        FileOutputStream fos = new FileOutputStream("testfile.jpg");
+        FileOutputStream fos = new FileOutputStream("testfile.txt");
         byte[] buffer = new byte[4096];
-
-        int filesize = 15123; // Send file size in separate msg
-        int read = 0;
-        int totalRead = 0;
-        int remaining = filesize;
-        while((read = dis.read(buffer, 0, Math.min(buffer.length, remaining))) > 0) {
-            totalRead += read;
-            remaining -= read;
-            System.out.println("read " + totalRead + " bytes.");
+	int read = 0;
+	int totalRead = 0;
+        while((read = dis.read(buffer, 0, buffer.length)) > 0) {
+	    totalRead += read;
+	    System.out.println("read " + totalRead + " bytes.");
             fos.write(buffer, 0, read);
         }
 
@@ -52,7 +49,7 @@ public class Receiver extends Thread {
     }
     //this is only to test the receiver class without the driver class
     public static void main(String[] args) {
-        Receiver fs = new Receiver(1988, false);
+        receiver fs = new receiver(1988, false);
         fs.start();
     }
 

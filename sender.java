@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Sender {
 
@@ -27,11 +28,14 @@ public class Sender {
         DataOutputStream dos = new DataOutputStream(s.getOutputStream());
         FileInputStream fis = new FileInputStream(file);
         byte[] buffer = new byte[4096];
-        File xor = new File("Xor.txt");
         while (fis.read(buffer) > 0)
         {
             byte[] bufferHash = FileCheckSum.hash(buffer);
-            encryptionXor.encrypt(bufferHash,"Key");
+	    //array with both chunk and checksum
+	    byte[] chunk = new byte[bufferHash.length + buffer.length];
+	    System.arraycopy(bufferHash, 0, chunk, 0, bufferHash.length);
+	    System.arraycopy(buffer, 0, chunk, bufferHash.length, buffer.length);
+            encryptionXor.encrypt(chunk,getKey());
             do{
                 dos.write(buffer);
                 remainingAttempts--;
@@ -49,6 +53,15 @@ public class Sender {
         }
         fis.close();
         dos.close();
+    }
+
+    private String getKey() {
+	Scanner sc = new Scanner( new File("key.txt"));
+	String answer = "";
+	while (sc.hasNext()) {
+	    answer = answer + sc.next()l
+	}
+	return answer;
     }
 
     private boolean waitForResponse()
