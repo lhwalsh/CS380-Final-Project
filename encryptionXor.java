@@ -1,5 +1,5 @@
 public class encryptionXor { 
-    private static byte[] encrypt(byte[] buffer, String key) {
+    public static byte[] encrypt(byte[] buffer, String key) {
    	 byte[] keyBytes = key.getBytes();
        byte[] output = new byte[buffer.length];
        for(int i = 0; i < buffer.length; i++) {
@@ -9,7 +9,7 @@ public class encryptionXor {
        return output;        
     }
 
-    private static String decrypt(int[] input, String key) {
+    public static String decrypt(int[] input, String key) {
         String output = "";        
         for(int i = 0; i < input.length; i++) {
             output += (char) ((input[i] - 48) ^ (int) key.charAt(i % (key.length() - 1)));

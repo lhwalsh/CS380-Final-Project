@@ -22,7 +22,7 @@ public class Sender {
         }
     }
 
-    public void sendFile(String file,int tryCount) throws IOException {
+    public void sendFile(String file,int tryCount) throws IOException , ClassNotFoundException{
         int remainingAttempts = tryCount;
         BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
         DataOutputStream dos = new DataOutputStream(s.getOutputStream());
@@ -37,6 +37,7 @@ public class Sender {
 	    System.arraycopy(buffer, 0, chunk, bufferHash.length, buffer.length);
             encryptionXor.encrypt(chunk,getKey());
             do{
+
                 dos.write(buffer);
                 remainingAttempts--;
                 if(remainingAttempts <= 0)
@@ -54,36 +55,26 @@ public class Sender {
         fis.close();
         dos.close();
     }
-
-    private String getKey() {
-	Scanner sc = new Scanner( new File("key.txt"));
-	String answer = "";
-	while (sc.hasNext()) {
-	    answer = answer + sc.next()l
-	}
-	return answer;
+    private String getKey() throws FileNotFoundException {
+	    Scanner sc = new Scanner( new File("key.txt"));
+	    String answer = "";
+	    while (sc.hasNext()) {
+	        answer = answer + sc.next();
+    	}
+	    return answer;
     }
 
-    private boolean waitForResponse()
+    private boolean waitForResponse() throws ClassNotFoundException
     {
         try
         {
-            ServerSocket servIn = new ServerSocket(port);
-            Socket inSocket = servIn.accept();
-            DataInputStream input = new DataInputStream(inSocket.getInputStream());
-            byte[] in = new byte[256];
-            input.read(in);
-            String s = new String("");
-            for(int i = 0; i < in.length;i++)
-            {
-                s += ((char) in[i]);
-            }
-            if(s.equals("good"))
-            {
+            s.shutdownOutput();
+            ObjectInputStream oIn = new ObjectInputStream(s.getInputStream());
+            String confirmation = (String)oIn.readObject();
+            if(confirmation.equals("ok")){
                 return true;
             }
-            else
-            {
+            else{
                 return false;
             }
         }
