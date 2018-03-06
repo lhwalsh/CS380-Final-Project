@@ -35,9 +35,7 @@ public class Sender {
 	    byte[] chunk = new byte[bufferHash.length + buffer.length];
 	    System.arraycopy(bufferHash, 0, chunk, 0, bufferHash.length);
 	    System.arraycopy(buffer, 0, chunk, bufferHash.length, buffer.length);
-	    System.out.println(bufferHash.length + " " + buffer.length + " " +  chunk.length);
             encryptionXor.encrypt(chunk,getKey());
-	    System.out.println(chunk.length);
             do{
 
                 dos.write(buffer);

@@ -40,14 +40,11 @@ public class receiver extends Thread {
         int i = 0;
         for(;i<temp.length - 16;i++)
         {
-	    //System.out.println("i: " + i + " data.length: " + data.length + " temp.length: " + temp.length + " temp.length - 16: " + (temp.length - 16));
             data[i] = temp[i];
         }
-	System.out.println("made it out");
 	int tempCounter = 0;
         for(;i<temp.length;i++)
         {
-	    System.out.println(hash.length + " " + tempCounter + " " + temp.length + " " + i);
             hash[tempCounter] = temp[i];
 	    tempCounter++;
         }
