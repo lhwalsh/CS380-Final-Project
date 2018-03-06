@@ -34,17 +34,22 @@ public class receiver extends Thread {
     public byte[] unpack(byte[] received) throws FileNotFoundException , IOException
     {
         byte[] temp = received;
-        byte[] hash = new byte[8];
+        byte[] hash = new byte[16];
         byte[] data = new byte[4096];
         temp = encryptionXor.encrypt(temp, getKey());
         int i = 0;
-        for(;i<temp.length - 8;i++)
+        for(;i<temp.length - 16;i++)
         {
+	    //System.out.println("i: " + i + " data.length: " + data.length + " temp.length: " + temp.length + " temp.length - 16: " + (temp.length - 16));
             data[i] = temp[i];
         }
+	System.out.println("made it out");
+	int tempCounter = 0;
         for(;i<temp.length;i++)
         {
-            hash[i] = temp[i];
+	    System.out.println(hash.length + " " + tempCounter + " " + temp.length + " " + i);
+            hash[tempCounter] = temp[i];
+	    tempCounter++;
         }
         if(FileCheckSum.compareHash(data,hash))
         {
@@ -69,7 +74,7 @@ public class receiver extends Thread {
     private void saveFile(Socket clientSock) throws IOException {
         DataInputStream dis = new DataInputStream(clientSock.getInputStream());
         FileOutputStream fos = new FileOutputStream("testfile.txt");
-        byte[] buffer = new byte[5004];
+        byte[] buffer = new byte[4112];
 	    int read = 0;
 	    int totalRead = 0;
         while((read = dis.read(buffer, 0, buffer.length)) > 0) {
