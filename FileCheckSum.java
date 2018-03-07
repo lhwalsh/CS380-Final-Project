@@ -16,18 +16,12 @@ public class FileCheckSum
     // to strings and compares them.
     static public boolean compareHash(byte[] toHash, byte[] hash)
     {
-        String compareHash = new String("");
-        for(int i = 0; i < hash.length; i++)
-        {
-            compareHash += ((char) hash[i]);
-        }
-        byte[] hash1 = FileCheckSum.hash(toHash);
-        String otherHash = new String("");
-        for(int i = 0; i < hash1.length; i++)
-        {
-            otherHash += ((char) hash[i]);
-        }
-        if(compareHash.equals(otherHash))
+        byte[] newHash = FileCheckSum.hash(toHash);
+        String newHashString = FileCheckSum.hashToString(newHash);
+        String actualHashString = FileCheckSum.hashToString(hash);
+        //System.out.println("a: " + newHashString);
+        //System.out.println("b: " + actualHashString);
+        if(actualHashString.equals(newHashString))
         {
             return true;
         }
@@ -51,9 +45,12 @@ public class FileCheckSum
     {
         byte[] a = new String("Test string").getBytes();
         byte[] b = FileCheckSum.hash(a);
-        System.out.println(FileCheckSum.hashToString(b));
-        Boolean d = FileCheckSum.compareHash(a,b);
+        //System.out.println(FileCheckSum.hashToString(b));
+        byte[] c = new String("Not hash").getBytes();
+        Boolean d = FileCheckSum.compareHash(a,c);
         System.out.println(d.toString());
+        d = FileCheckSum.compareHash(a,b);
+        System.out.println(d);
 
     }
 
