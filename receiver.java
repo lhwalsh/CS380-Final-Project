@@ -13,7 +13,9 @@ public class receiver extends Thread {
 
     private ServerSocket ss;
     private Socket clientSock;
+    private boolean asciiArmoring;
     public receiver(int port, boolean asciiArmoring) {
+	this.asciiArmoring = asciiArmoring;
         try {
             ss = new ServerSocket(port);
         } catch (IOException e) {
@@ -72,7 +74,7 @@ public class receiver extends Thread {
         byte[] temp = received;
         byte[] hash = new byte[16];
         byte[] data = new byte[4096];
-        //temp = encryptionXor.encrypt(temp, getKey());
+        temp = encryptionXor.encrypt(temp, getKey());
         int i = 0;
         for(;i<data.length;i++)
         {
@@ -112,6 +114,9 @@ public class receiver extends Thread {
 	    int totalRead = 0;
         while((read = dis.read(buffer, 0, buffer.length)) > 0) {
 	        totalRead += read;
+		if (asciiArmoring) {
+		    buffer = Base64.getDecoder().decode(buffer);
+		}
 	        byte[] newBuffer = unpack(buffer);
 	        System.out.println("read " + totalRead + " bytes.");
             fos.write(newBuffer, 0, read-16);

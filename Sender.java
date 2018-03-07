@@ -68,12 +68,12 @@ public class Sender {
 	    byte[] chunk = new byte[bufferHash.length + buffer.length];
 	    System.arraycopy(buffer, 0, chunk, 0, buffer.length);
 	    System.arraycopy(bufferHash, 0, chunk, buffer.length, bufferHash.length);
-	    //encryptionXor.encrypt(chunk,getKey());
+	    byte[] send = encryptionXor.encrypt(chunk,getKey());
             if(asciiArmoring) {
-            	//chunk = Base64.getEncoder().encode(chunk);
+            	send = Base64.getEncoder().encode(send);
             }
             do{
-                dos.write(chunk);
+                dos.write(send);
                 remainingAttempts--;
                 if(remainingAttempts <= 0)
                 {
