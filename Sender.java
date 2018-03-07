@@ -18,11 +18,39 @@ public class Sender {
         this.file = file;
         try {
             s = new Socket(host, port);
+	    System.out.println(verify());
             sendFile(file,tryCount);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public boolean verify() throws IOException {
+	Scanner sc = new Scanner(System.in);
+	DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+	DataInputStream dis = new DataInputStream(s.getInputStream());
+	System.out.println("Please enter the username.");
+	String username = sc.next();
+	dos.writeUTF(username);
+	if (dis.readByte() == 0) {
+	    sc.close();
+	    dos.close();
+	    dis.close();
+	    System.out.println("Incorrect username.");
+	    return false;
+	}
+	System.out.println("Please enter the password.");
+	String password = sc.next();
+	dos.writeUTF(password);
+	if (dis.readByte() == 0) {
+	    sc.close();
+	    dos.close();
+	    dis.close();
+	    System.out.println("Incorrect password.");
+	    return false;
+	}
+	return true;
+    }		
 
     public void sendFile(String file,int tryCount) throws IOException , ClassNotFoundException{
         int remainingAttempts = tryCount;

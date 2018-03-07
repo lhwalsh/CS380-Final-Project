@@ -1,4 +1,5 @@
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -25,12 +26,44 @@ public class receiver extends Thread {
         while (true) {
             try {
                 clientSock = ss.accept();
+		System.out.println(verify(clientSock));
                 saveFile(clientSock);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    public boolean verify(Socket clientSock) throws FileNotFoundException, IOException {
+	Scanner sc = new Scanner(new File("userpass.txt"));
+	DataOutputStream dos = new DataOutputStream(clientSock.getOutputStream());
+	DataInputStream dis = new DataInputStream(clientSock.getInputStream());
+	String attempt = dis.readUTF();
+	if (attempt.equals(sc.next())) {
+	    dos.writeByte(1);
+	} else {
+	    dos.writeByte(0);
+	    sc.close();
+	    dos.close();
+	    dis.close();
+	    System.out.println("Incorrect Username.");
+	    return false;
+	}
+	attempt = dis.readUTF();
+	if (attempt.equals(sc.next())) {
+	    dos.writeByte(1);
+	    return true;
+	} else {
+	    dos.writeByte(0);
+	    sc.close();
+	    dos.close();
+	    dis.close();
+	    System.out.println("Incorrect Password.");
+	    return false;
+	}
+    }
+
+
     public byte[] unpack(byte[] received) throws FileNotFoundException , IOException
     {
         byte[] temp = received;
