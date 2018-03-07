@@ -14,8 +14,9 @@ public class receiver extends Thread {
 
     private ServerSocket ss;
     private Socket clientSock;
-    private boolean asciiArmoring;
-    public receiver(int port) {
+    private boolean error;
+    public receiver(int port, boolean error) {
+	this.error = error;
         try {
             ss = new ServerSocket(port);
         } catch (IOException e) {
@@ -82,7 +83,9 @@ public class receiver extends Thread {
         byte[] temp = received;
         byte[] hash = new byte[16];
         byte[] data = new byte[4096];
-        temp = encryptionXor.encrypt(temp, getKey());
+	if (!error) {
+            temp = encryptionXor.encrypt(temp, getKey());
+	}
         int i = 0;
         for(;i<data.length;i++)
         {
