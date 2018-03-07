@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.Base64;
 
 public class Sender {
 
@@ -10,7 +11,8 @@ public class Sender {
     private String host;
     private int port;
     private String file;
-    public Sender(String host, int port, String file,int tryCount) {
+    private boolean asciiArmoring;
+    public Sender(String host, int port, String file,int tryCount,boolean asciiArmoring) {
         this.host = host;
         this.port = port;
         this.file = file;
@@ -36,6 +38,10 @@ public class Sender {
 	    System.arraycopy(bufferHash, 0, chunk, 0, bufferHash.length);
 	    System.arraycopy(buffer, 0, chunk, bufferHash.length, buffer.length);
             encryptionXor.encrypt(chunk,getKey());
+            if(asciiArmoring) {
+            	chunk = Base64.getEncoder().encode(chunk);
+            }
+
             do{
 
                 dos.write(buffer);
@@ -87,7 +93,7 @@ public class Sender {
 
     //this is only to test the sender class without the driver class
     public static void main(String[] args) {
-        Sender fc = new Sender("localhost", 1988, "test.txt",3);
+        Sender fc = new Sender("localhost", 1988, "test.txt",3, true);
     }
 
 }
