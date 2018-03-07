@@ -26,7 +26,10 @@ public class receiver extends Thread {
         while (true) {
             try {
                 clientSock = ss.accept();
-		System.out.println(verify(clientSock));
+		        if(!verify(clientSock))
+                {
+                    System.exit(1);
+                }
                 saveFile(clientSock);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -69,17 +72,17 @@ public class receiver extends Thread {
         byte[] temp = received;
         byte[] hash = new byte[16];
         byte[] data = new byte[4096];
-        temp = encryptionXor.encrypt(temp, getKey());
+        //temp = encryptionXor.encrypt(temp, getKey());
         int i = 0;
-        for(;i<16;i++)
+        for(;i<data.length;i++)
         {
-            hash[i] = temp[i];
+            data[i] = temp[i];
         }
-	int tempCounter = 0;
+        int tempCounter = 0;
         for(;i<temp.length;i++)
         {
-            data[tempCounter] = temp[i];
-	    tempCounter++;
+            hash[tempCounter] = temp[i];
+            tempCounter++;
         }
         if(FileCheckSum.compareHash(data,hash))
         {
@@ -111,7 +114,7 @@ public class receiver extends Thread {
 	        totalRead += read;
 	        byte[] newBuffer = unpack(buffer);
 	        System.out.println("read " + totalRead + " bytes.");
-            fos.write(newBuffer, 0, read-8);
+            fos.write(newBuffer, 0, read-16);
         }
 
         fos.close();
@@ -119,7 +122,7 @@ public class receiver extends Thread {
     }
     private void sendConfirmation(Boolean status) throws IOException
     {
-        ObjectOutputStream oos = new ObjectOutputStream(clientSock.getOutputStream());
+	ObjectOutputStream oos = new ObjectOutputStream(clientSock.getOutputStream());
         oos.flush();
         if(status)
         {

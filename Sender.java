@@ -18,7 +18,10 @@ public class Sender {
         this.file = file;
         try {
             s = new Socket(host, port);
-	    System.out.println(verify());
+	        if(!verify())
+            {
+                System.exit(1);
+            }
             sendFile(file,tryCount);
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,13 +68,11 @@ public class Sender {
 	    byte[] chunk = new byte[bufferHash.length + buffer.length];
 	    System.arraycopy(buffer, 0, chunk, 0, buffer.length);
 	    System.arraycopy(bufferHash, 0, chunk, buffer.length, bufferHash.length);
-            encryptionXor.encrypt(chunk,getKey());
+	    //encryptionXor.encrypt(chunk,getKey());
             if(asciiArmoring) {
-            	chunk = Base64.getEncoder().encode(chunk);
+            	//chunk = Base64.getEncoder().encode(chunk);
             }
-
             do{
-
                 dos.write(chunk);
                 remainingAttempts--;
                 if(remainingAttempts <= 0)
@@ -83,8 +84,6 @@ public class Sender {
                     return;
                 }
             }while(!waitForResponse());
-
-
         }
         fis.close();
         dos.close();
