@@ -63,8 +63,8 @@ public class Sender {
             byte[] bufferHash = FileCheckSum.hash(buffer);
 	    //array with both chunk and checksum
 	    byte[] chunk = new byte[bufferHash.length + buffer.length];
-	    System.arraycopy(bufferHash, 0, chunk, 0, bufferHash.length);
-	    System.arraycopy(buffer, 0, chunk, bufferHash.length, buffer.length);
+	    System.arraycopy(buffer, 0, chunk, 0, buffer.length);
+	    System.arraycopy(bufferHash, 0, chunk, buffer.length, bufferHash.length);
             encryptionXor.encrypt(chunk,getKey());
             if(asciiArmoring) {
             	chunk = Base64.getEncoder().encode(chunk);
@@ -72,7 +72,7 @@ public class Sender {
 
             do{
 
-                dos.write(buffer);
+                dos.write(chunk);
                 remainingAttempts--;
                 if(remainingAttempts <= 0)
                 {
