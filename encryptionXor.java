@@ -8,14 +8,6 @@ public class encryptionXor {
        }
        return output;        
     }
-
-    public static String decrypt(int[] input, String key) {
-        String output = "";        
-        for(int i = 0; i < input.length; i++) {
-            output += (char) ((input[i] - 48) ^ (int) key.charAt(i % (key.length() - 1)));
-        }
-        return output;
-    }
     
     public static byte[] hexStringToByteArray(String s) {
        int len = s.length();
