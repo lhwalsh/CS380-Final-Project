@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class driver {
     public static void main(String args[]) {
+	boolean error = false;
 	// user input on whether to use sender or receiver class
 	Scanner sc = new Scanner(System.in);
 	System.out.println("Would you like to send or receive a file?");
@@ -33,9 +34,13 @@ public class driver {
 	    } else if (input.charAt(0) == 'R' || input.contains("RECEIVE")) {
 			//used to quit out of the loop
 			sendOrReceive = true;
+		    	System.out.println("Do you want to cause the hash to not match the chunk?");
+		    	input = sc.next().toUpperCase();
+		    	if (input.charAt(0) == 'Y' || input.contains("YES")
+			    error = true;
 			//creates receiver object
 			//port number should be the same as the sender
-			receiver receive = new receiver(4444);
+			receiver receive = new receiver(4444, error);
 			//starts the receiver object to look for a file to receive, if nothing is found it will wait
 			receive.start();
 		    //if the user says they want to quit or exit it will exit the loop and program
