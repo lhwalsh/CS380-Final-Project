@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Base64;
 
 public class receiver extends Thread {
 

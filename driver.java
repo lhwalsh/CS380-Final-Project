@@ -33,6 +33,10 @@ public class driver {
 	    } else if (input.charAt(0) == 'R' || input.contains("RECEIVE")) {
 			//used to quit out of the loop
 			sendOrReceive = true;
+			System.out.println("Do you require ASCII Armoring?");
+			input = sc.next().toUpperCase();
+			if (input.charAt(0) == 'Y' || input.contains("YES"))
+			    asciiArmoring = true;
 			//creates receiver object
 			//port number should be the same as the sender
 			receiver receive = new receiver(4444, asciiArmoring);
