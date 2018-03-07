@@ -71,14 +71,14 @@ public class receiver extends Thread {
         byte[] data = new byte[4096];
         temp = encryptionXor.encrypt(temp, getKey());
         int i = 0;
-        for(;i<temp.length - 16;i++)
+        for(;i<16;i++)
         {
-            data[i] = temp[i];
+            hash[i] = temp[i];
         }
 	int tempCounter = 0;
         for(;i<temp.length;i++)
         {
-            hash[tempCounter] = temp[i];
+            data[tempCounter] = temp[i];
 	    tempCounter++;
         }
         if(FileCheckSum.compareHash(data,hash))
