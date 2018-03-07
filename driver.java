@@ -33,13 +33,9 @@ public class driver {
 	    } else if (input.charAt(0) == 'R' || input.contains("RECEIVE")) {
 			//used to quit out of the loop
 			sendOrReceive = true;
-			System.out.println("Do you require ASCII Armoring?");
-			input = sc.next().toUpperCase();
-			if (input.charAt(0) == 'Y' || input.contains("YES"))
-			    asciiArmoring = true;
 			//creates receiver object
 			//port number should be the same as the sender
-			receiver receive = new receiver(4444, asciiArmoring);
+			receiver receive = new receiver(4444);
 			//starts the receiver object to look for a file to receive, if nothing is found it will wait
 			receive.start();
 		    //if the user says they want to quit or exit it will exit the loop and program

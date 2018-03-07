@@ -15,8 +15,7 @@ public class receiver extends Thread {
     private ServerSocket ss;
     private Socket clientSock;
     private boolean asciiArmoring;
-    public receiver(int port, boolean asciiArmoring) {
-	this.asciiArmoring = asciiArmoring;
+    public receiver(int port) {
         try {
             ss = new ServerSocket(port);
         } catch (IOException e) {
@@ -58,7 +57,6 @@ public class receiver extends Thread {
 	attempt = dis.readUTF();
 	if (attempt.equals(sc.next())) {
 	    dos.writeByte(1);
-	    return true;
 	} else {
 	    dos.writeByte(0);
 	    sc.close();
@@ -67,6 +65,15 @@ public class receiver extends Thread {
 	    System.out.println("Incorrect Password.");
 	    return false;
 	}
+	if (dis.readByte() == 1) {
+	    asciiArmoring = true;
+	} else {
+	    asciiArmoring = false;
+	}
+	sc.close();
+	dos.close();
+	dis.close();
+	return true;
     }
 
 
@@ -142,7 +149,7 @@ public class receiver extends Thread {
 
     //this is only to test the receiver class without the driver class
     public static void main(String[] args) {
-        receiver fs = new receiver(1988, false);
+        receiver fs = new receiver(1988);
         fs.start();
     }
 

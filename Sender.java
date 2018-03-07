@@ -52,6 +52,14 @@ public class Sender {
 	    System.out.println("Incorrect password.");
 	    return false;
 	}
+	if (asciiArmoring) {
+	    dos.writeByte(1);
+	} else {
+	    dos.writeByte(0);
+	}
+	sc.close();
+	dos.close();
+	dis.close();
 	return true;
     }		
 
