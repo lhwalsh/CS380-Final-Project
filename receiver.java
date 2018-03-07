@@ -119,7 +119,7 @@ public class receiver extends Thread {
 
     private void saveFile(Socket clientSock) throws IOException {
         DataInputStream dis = new DataInputStream(clientSock.getInputStream());
-        FileOutputStream fos = new FileOutputStream("testfile.txt");
+        FileOutputStream fos = new FileOutputStream("output.txt");
         byte[] buffer = new byte[4112];
 	    int read = 0;
 	    int totalRead = 0;
