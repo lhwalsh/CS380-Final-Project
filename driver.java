@@ -29,7 +29,7 @@ public class driver {
 			    asciiArmoring = true;
 				//the parameters will need to be changed later
 				//creates the sender object which will automatically send if a receiver is found, or quit otherwise
-				Sender send = new Sender("localhost", 4444, "test.txt", 3, asciiArmoring);
+				Sender send = new Sender("localhost", 4444, "input.txt", 3, asciiArmoring);
 			    //decides the user is receiving if they begin the sentene with r or use the word receive
 	    } else if (input.charAt(0) == 'R' || input.contains("RECEIVE")) {
 			//used to quit out of the loop
