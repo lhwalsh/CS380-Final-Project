@@ -101,8 +101,7 @@ public class Sender {
     private boolean waitForResponse() throws ClassNotFoundException
     {
         try
-        {
-            s.shutdownOutput();
+        {          
             ObjectInputStream oIn = new ObjectInputStream(s.getInputStream());
             String confirmation = (String)oIn.readObject();
             if(confirmation.equals("ok")){
